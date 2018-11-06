@@ -1,0 +1,189 @@
+<?php
+	session_start();
+
+	require('connect.php');
+
+	// If logout is clicked, logs the user out.
+	if (isset($_GET['logout'])) {
+		session_destroy();
+		unset($_SESSION['username']);
+		header('Location: h.php');
+	}
+
+	// Declare error variables
+	$username_error = false;
+	$email_error = false;
+	$password_error = false;
+	$username_empty = false;
+	$password_empty = false;
+	$login_error = false;
+	$register_error = false;
+
+	// Registering a new user
+	if (isset($_POST['new_user'])) {
+
+		$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$password_1 = filter_input(INPUT_POST, 'password_1', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$password_2 = filter_input(INPUT_POST, 'password_2', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+		//Grabs data from the database so we can check if username and email have been taken already.
+		$query = "SELECT username, email FROM users";
+	    $statement = $db->prepare($query);
+	    $statement->execute(); 
+
+	    $row = $statement->fetch();
+	  	
+	  	/*
+	   	if ($row['username'] == $username){
+	      	$username_error = true;
+	    }
+
+	    if ($row['email'] == $email){
+	      	$email_error = true;
+	    }
+		*/
+
+	  	if ($password_1 != $password_2) {
+	  		$password_error = true;
+	  	}
+		
+	  	if (/*$username_error == false && $email_error == false && */$password_error == false){
+			if (isset($_POST['new_user']) && !empty($name) && !empty($email) && !empty($username) && !empty($password_1)){
+
+				$query = "INSERT INTO users (name, email, username, password) VALUES (:name, :email, :username, :password)";
+				$statement = $db->prepare($query);
+		        $statement->bindValue(':name',$name);
+		        $statement->bindValue(':email',$email);
+		        $statement->bindValue(':username',$username);
+		        $statement->bindValue(':password',$password_1);
+
+			    if ($statement->execute()) {
+			 	    header('Location: login.php');   
+			  	}
+			    exit;
+			}
+			else {
+				$register_error = true;
+			}
+		}
+	}
+
+	// Logging in a user
+	if (isset($_POST['login_user'])) {
+		$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+		if (empty($username)) {
+			$username_empty = true;
+		}
+
+		if (empty($password)) {
+			$password_empty = true;
+		}
+
+		if ($username_empty != true && $password_empty != true) {
+			
+			$query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+			$statement = $db->prepare($query);
+			$statement->execute();
+
+			if ($statement->rowCount() == 1) {
+				$_SESSION['username'] = $username;
+				$_SESSION['success'] = "You are now logged in";
+				header('Location: h.php');
+			}
+			else {
+				$login_error = true;
+			}
+		}
+	}
+?>
+<!DOCTYPE html>
+<html lang="EN">
+<head>
+	<meta charset="utf-8">
+	<title>JSON Urban Dance Studio</title>
+	<link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
+</head>
+<body>
+	<div id="container">
+		<header id="header">
+			<a href="h.php"><h2>JSON</h2><h3> Urban Dance Studio</h3></a><h1>.</h1>
+			<?php include('nav.php') ?>
+		</header>
+		<div id="content">
+			<div class="header">
+  				<h2>Login</h2>
+  			</div>
+	
+		  	<form method="post" action="login.php">
+		  		<div>
+		  	  		<input type="text" name="username" placeholder="Username">
+		  	  		<?php if ($username_empty == true): ?>
+		  	  			<p>Username is required</p>
+		  	  		<?php endif ?>
+		  		</div>
+		  		<div>
+		  	  		<input type="password" name="password" placeholder="Password">
+		  	  		<?php if ($password_empty == true): ?>
+		  	  			<p>Password is required</p>
+		  	  		<?php elseif ($login_error == true): ?>
+		  	  			<p>Username and password invalid. Please try again.</p>
+		  	  		<?php endif ?>
+		  		</div>
+		  		<div>
+		  	  		<button type="submit" name="login_user">Login</button>
+		  		</div>
+		  	</form>
+
+		  	<div class="header">
+  				<h2>Create An Account</h2>
+  			</div>
+		  	<form method="post" action="login.php">
+		  		<?php if ($register_error == true): ?>
+		  	  			<p>Please fill in the fields.</p>
+		  	  		<?php endif ?>
+		  		<div>
+		  	  		<input type="text" name="name" id="name" placeholder="Name">
+		  		</div>
+		  		<div>
+		  	  		<input type="text" name="email" id="email" placeholder="Email">
+		  	  		<?php if ($email_error == true): ?>
+		  	  			<p>Email already exists.</p>
+		  	  		<?php endif ?>
+		  		</div>
+		  		<div>
+		  	  		<input type="text" name="username" id="username" placeholder="Username">
+		  	  		<?php if ($username_error == true): ?>
+		  	  			<p>Username already exists.</p>
+		  	  		<?php endif ?>
+		  		</div>
+		  		<div>
+		  	  		<input type="password" name="password_1" id="password_1" placeholder="Password">
+		  		</div>
+		  		<div>
+		  	  		<input type="password" name="password_2" id="password_2" placeholder="Re-enter Password">
+		  	  		<?php if ($password_error == true): ?>
+		  	  			<p>Password does not match.</p>
+		  	  		<?php endif ?>
+		  		</div>
+		  		<div>
+		  	  		<button type="submit" name="new_user">Register</button>
+		  		</div>
+		  	</form>
+		</div>
+		<footer>
+			<nav id="navfooter">
+				<ul>
+					<li><a href="h.php">Home</a></li><!--
+				 --><li><a href="aboutus.html">About Us</a></li><!--
+				 --><li><a href="formpage.html">Contact Us</a></li>
+				</ul>
+				<div id="bottomrow">Copyright &copy; <a href="#">2018 JSON Urban Dance Studio</a></div>
+			</nav>
+		</footer>
+	</div>
+</body>
+</html>

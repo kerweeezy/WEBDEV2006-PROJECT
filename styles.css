@@ -1,0 +1,155 @@
+html, body, section, p, header, footer, div, article, aside{
+	margin: 0;
+	padding: 0;
+}
+
+body{
+	font-family: 'Anton', sans-serif;
+	background-color: #F2E9E4;
+}
+
+#fixedbg{
+	background-image: url("Images/programbg3.jpg");
+    min-height: 900px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#header{
+	border-bottom: 8px solid #C9ADA7;
+}
+
+#header a{
+	text-decoration: none;
+}
+
+#container{
+	width: 98%;
+	height: 100%;
+	padding: 10px;
+	margin: 0px auto;
+}
+
+h1{
+	margin-left: 10px;
+	font-size: 80px;
+	color: #FFFFFF;
+	display: inline;
+}
+
+h2{
+	font-size: 80px;
+	letter-spacing: 5px;
+	word-spacing: 10px;
+	color: #4A4E69;
+	display: inline;
+	margin-right: 5px;
+}
+
+h3{
+	font-size: 50px;
+	letter-spacing: 5px;
+	word-spacing: 10px;
+	color: #4A4E69;
+	display: inline;
+	margin-right: 5px;
+}
+
+#navigation{
+	position: relative;	
+	float: right;
+}
+
+#navigation ul, #navigation ul li{
+	display: inline;
+	list-style: none;
+	margin: 0px 0px;
+	padding: 0px;
+}
+
+#navigation ul a{
+	font-size: 30px;
+	color: #4A4E69;
+	text-decoration: none;
+	height: 20px;
+	padding: 4px;
+}
+
+#navigation ul li:after{
+	color: #9A8C98;
+	content: "|";
+	font-size: 30px;
+}
+
+#navigation ul li:last-of-type:after{
+	content: "";
+}
+
+#navigation ul a:hover{
+	color: #9A8C98;
+}
+
+#navigation a:focus{
+	color: #4A4E69;
+}
+
+#content{
+	width: 100%;
+	margin: 0px auto;
+}
+
+#p1{
+	color: #4A4E69;
+	margin: 400px auto;	
+	font-size: 80px;
+	padding-right: 500px;
+}
+
+#p2{
+	color: #4A4E69;
+	margin: 400px auto;
+	font-size: 80px;
+	text-align: right;
+	padding-left: 500px;
+}
+
+#navfooter{
+	margin-top: 80px;
+	min-height: 100px;
+	text-align: center;
+}
+
+#navfooter ul{
+	display: block;
+	font-size: 20px;
+}
+
+#navfooter ul li{
+	list-style: none;
+	display: inline;
+}
+
+#navfooter ul li a, #bottomrow, #bottomrow a{
+	color: #4A4E69;
+	text-decoration: none;
+	padding: 5px;
+}
+
+#navfooter ul li:after{
+	color: #9A8C98;
+	content: "|";
+}
+
+#navfooter ul li:last-of-type:after{
+	content: "";
+}
+
+#navfooter a:hover{
+	color: #9A8C98;
+}
+
+#navfooter a:focus{
+	color: #4A4E69;
+}

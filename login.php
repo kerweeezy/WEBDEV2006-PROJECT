@@ -22,20 +22,21 @@
 	// Registering a new user
 	if (isset($_POST['new_user'])) {
 
+		// Filter and sanitize the inputs.
 		$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		$password_1 = filter_input(INPUT_POST, 'password_1', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		$password_2 = filter_input(INPUT_POST, 'password_2', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-		//Grabs data from the database so we can check if username and email have been taken already.
+		/* // Grabs data from the database so we can check if username and email have been taken already.
 		$query = "SELECT username, email FROM users";
 	    $statement = $db->prepare($query);
 	    $statement->execute(); 
 
 	    $row = $statement->fetch();
 	  	
-	  	/*
+	  	
 	   	if ($row['username'] == $username){
 	      	$username_error = true;
 	    }
@@ -45,10 +46,12 @@
 	    }
 		*/
 
+	    // Checks to see if both passwords typed in are matching.
 	  	if ($password_1 != $password_2) {
 	  		$password_error = true;
 	  	}
 		
+		// If password is valid, add user to the database.
 	  	if (/*$username_error == false && $email_error == false && */$password_error == false){
 			if (isset($_POST['new_user']) && !empty($name) && !empty($email) && !empty($username) && !empty($password_1)){
 
@@ -75,23 +78,30 @@
 		$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		$password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
+		// Checks to see if username is empty.
 		if (empty($username)) {
 			$username_empty = true;
 		}
 
+		// Checks to see if password is empty.
 		if (empty($password)) {
 			$password_empty = true;
 		}
 
+		// If password and password are not empty, check if they are found in the database.
 		if ($username_empty != true && $password_empty != true) {
 			
+			// Grab rows where username and password match with the username and password entered.
 			$query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
 			$statement = $db->prepare($query);
 			$statement->execute();
 
+			// Only one row should be returned and therefore username will be stored in a session variable.
 			if ($statement->rowCount() == 1) {
 				$_SESSION['username'] = $username;
 				$_SESSION['success'] = "You are now logged in";
+
+				// Send back to main page after logging in successfully.
 				header('Location: h.php');
 			}
 			else {
@@ -117,7 +127,6 @@
 			<div class="header">
   				<h2>Login</h2>
   			</div>
-	
 		  	<form method="post" action="login.php">
 		  		<div>
 		  	  		<input type="text" name="username" placeholder="Username">
@@ -137,7 +146,6 @@
 		  	  		<button type="submit" name="login_user">Login</button>
 		  		</div>
 		  	</form>
-
 		  	<div class="header">
   				<h2>Create An Account</h2>
   			</div>
@@ -178,8 +186,8 @@
 			<nav id="navfooter">
 				<ul>
 					<li><a href="h.php">Home</a></li><!--
-				 --><li><a href="aboutus.html">About Us</a></li><!--
-				 --><li><a href="formpage.html">Contact Us</a></li>
+				 --><li><a href="">About Us</a></li><!--
+				 --><li><a href="">Contact Us</a></li>
 				</ul>
 				<div id="bottomrow">Copyright &copy; <a href="#">2018 JSON Urban Dance Studio</a></div>
 			</nav>

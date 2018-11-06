@@ -22,7 +22,7 @@
 			<?php include('nav.php') ?>
 		</header>
 		<div id="content">
-			<!-- Notification message -->
+			<!-- Notification message, display that the user has successfully logged in. -->
 			<?php if (isset($_SESSION['success'])): ?>
 				<h3>
 					<?php
@@ -39,8 +39,8 @@
 			<nav id="navfooter">
 				<ul>
 					<li><a href="h.php">Home</a></li><!--
-				 --><li><a href="aboutus.html">About Us</a></li><!--
-				 --><li><a href="formpage.html">Contact Us</a></li>
+				 --><li><a href="">About Us</a></li><!--
+				 --><li><a href="">Contact Us</a></li>
 				</ul>
 				<div id="bottomrow">Copyright &copy; <a href="#">2018 JSON Urban Dance Studio</a></div>
 			</nav>

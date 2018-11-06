@@ -1,9 +1,13 @@
 <?php
-    /*
-      Will authenticate that a registered user is accesing the page.
-    */
+    session_start();
+	require('connect.php');
 
-    require('connect.php');
+	// If logout is clicked, logs the user out.
+	if (isset($_GET['logout'])) {
+		session_destroy();
+		unset($_SESSION['username']);
+		header('Location: h.php');
+	}
 
 ?>
 <!DOCTYPE html>
@@ -23,14 +27,18 @@
 			<ul>
 				<li><a href="createclass.php">Add New Class</a></li>
 				<li><a href="createprogram.php">Add New Program</a></li>
+				<li><a href="">Modify Class</a></li>
+				<li><a href="">Modify Program</a></li>
+				<li><a href="">Delete Class</a></li>
+				<li><a href="">Delete Program</a></li>
 			</ul>
 		</div>
 		<footer>
 			<nav id="navfooter">
 				<ul>
 					<li><a href="h.php">Home</a></li><!--
-				 --><li><a href="aboutus.html">About Us</a></li><!--
-				 --><li><a href="formpage.html">Contact Us</a></li>
+				 --><li><a href="">About Us</a></li><!--
+				 --><li><a href="">Contact Us</a></li>
 				</ul>
 				<div id="bottomrow">Copyright &copy; <a href="#">2018 JSON Urban Dance Studio</a></div>
 			</nav>

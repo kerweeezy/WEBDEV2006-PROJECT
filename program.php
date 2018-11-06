@@ -10,7 +10,7 @@
 	}
     
      // SQL is written as a String.
-     $query = "SELECT * FROM classes ORDER BY classid DESC"; 
+     $query = "SELECT * FROM programs ORDER BY programid DESC"; 
 
      // A PDO::Statement is prepared from the query.
      $statement = $db->prepare($query);
@@ -19,7 +19,6 @@
      $statement->execute();
 
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,25 +26,25 @@
     <title>JSON Urban Dance Studio</title>
 </head>
 <body>
-	<?php while ($row = $statement->fetch()): ?>
-		<?php if ($_GET['classid'] == $row['classid']): ?>
-			<div id="container">
-			    <header id="header">
-					<a href="h.php"><h2>JSON</h2><h3> Urban Dance Studio</h3></a><h1>.</h1>
-					<?php include('nav.php') ?>
-				</header>
-			    <div class="class">
-			      	<h2><?= $row['style'] ?></a></h2>
-			    </div>
-			</div>
+	<div id="container">
+		<header id="header">
+			<a href="h.php"><h2>JSON</h2><h3> Urban Dance Studio</h3></a><h1>.</h1>
+			<?php include('nav.php') ?>
+		</header>
+		<?php while ($row = $statement->fetch()): ?>
+			<?php if ($_GET['programid'] == $row['programid']): ?>
+				<div class="class">
+				  	<h2><?= $row['difficulty_level'] ?></a></h2>
+				  	<p><?= $row['amount'] ?></p>
+				</div>
 			<?php endif ?>
-	<?php endwhile ?>
+		<?php endwhile ?>
         <footer>
 			<nav id="navfooter">
 				<ul>
 					<li><a href="h.php">Home</a></li><!--
-				 --><li><a href="aboutus.html">About Us</a></li><!--
-				 --><li><a href="formpage.html">Contact Us</a></li>
+				 --><li><a href="">About Us</a></li><!--
+				 --><li><a href="">Contact Us</a></li>
 				</ul>
 				<div id="bottomrow">Copyright &copy; <a href="#">2018 JSON Urban Dance Studio</a></div>
 			</nav>

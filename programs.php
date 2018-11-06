@@ -31,11 +31,11 @@
 		        <ul>
 		          	<?php while($row = $statement->fetch()): ?>
 		              	<div class="class">
-		                	<h2><a href='program.php?programid=<?= $row['programid']?>'><?=$row['difficulty_level']?></a></h2>
+		                	<h2><a href='program.php?programid=<?= $row['programid']?>'><?= $row['difficulty_level'] ?></a></h2>
 		                	<div>
 		                		<ul>
-		                			<li>Description: <?= $row['description'] ?></li>
 		                			<li>Amount: <?= $row['amount'] ?></li>
+		                			<li>Description: <?= $row['description'] ?></li>
 		                		</ul>
 		                	</div>
 		              	</div>

@@ -18,6 +18,50 @@
      // Execution on the DB server is delayed until we execute().
      $statement->execute();
 
+     $admin = false;
+
+     if (isset($_SESSION['user'])) {
+		$user = $_SESSION['user'];
+
+		if ($user["username"] != 'admin') {
+			header('Location: programs.php');
+		}
+		else {
+			$admin = true;
+
+			$amount = filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_FLOAT);
+			$difficulty_level = filter_input(INPUT_POST, 'difficulty_level', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$amount = filter_input(INPUT_POST, 'amount', FILTER_SANITIZE_NUMBER_FLOAT);
+			$error_string = false;
+
+			if ($_POST && !empty($difficulty_level) && !empty($description)) {
+				$programid = filter_input(INPUT_POST,'programid', FILTER_SANITIZE_NUMBER_INT);
+				
+				// Updates class info.
+				if ($_POST['command']=='Update')
+				{
+					$query = "UPDATE programs SET difficulty_level = :difficulty_level, description = :description, amount = :amount WHERE programid = :programid";
+					$statement = $db->prepare($query);
+				    $statement->bindValue(':difficulty_level',$difficulty_level);
+				    $statement->bindValue(':description',$description);
+				    $statement->bindValue(':amount', $amount);
+				    $statement->bindValue(':programid', $programid, PDO::PARAM_INT);
+				}
+				// Deletes the class by classid.
+				else if ($_POST['command']=='Delete')
+				{
+					$query = "DELETE FROM programs WHERE programid = :programid";
+					$statement = $db->prepare($query);
+					$statement->bindValue(':programid', $programid, PDO::PARAM_INT);
+				}
+
+				if ($statement->execute()) {
+	 	    		header('Location: programs.php');   
+	  			}
+			}
+		}
+	}
 ?>
 <!DOCTYPE html>
 <html>

@@ -11,7 +11,7 @@
 ?>
 <nav id="navigation">
 	<!-- Changes sign in/logout nav option depending if a user or the admin is signed in. -->
-	<?php if (isset($_SESSION['username'])): ?>
+	<?php if (isset($_SESSION['user'])): ?>
 		<?php if ($admin == true): ?>
 			<ul>
 				<li><a href="index.php">Home</a></li><!--

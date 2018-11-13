@@ -7,7 +7,7 @@
 	if (isset($_SESSION['user'])) {
 		$user = $_SESSION['user'];
 
-		if ($user["username"] == 'admin') {
+		if ($user["username"] != 'admin') {
 			header('Location: index.php');
 		}
 	}

@@ -39,7 +39,7 @@
 			if ($_POST && !empty($style) && !empty($instructor)) {
 				$classid = filter_input(INPUT_POST,'classid', FILTER_SANITIZE_NUMBER_INT);
 				
-				// Updates class info.
+				// Updates class info by classid.
 				if ($_POST['command']=='Update')
 				{
 					$query = "UPDATE classes SET style = :style, instructor = :instructor, amount = :amount WHERE classid = :classid";

@@ -1,6 +1,6 @@
 <?php
     session_start();
-    
+
 	require('connect.php');
 
 	// If logout is clicked, logs the user out.
@@ -31,8 +31,6 @@
 				<li><a href="createprogram.php">Add New Program</a></li>
 				<li><a href="">Modify Class</a></li>
 				<li><a href="">Modify Program</a></li>
-				<li><a href="">Delete Class</a></li>
-				<li><a href="">Delete Program</a></li>
 			</ul>
 		</div>
 		<footer>

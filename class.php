@@ -1,5 +1,6 @@
 <?php
     session_start();
+
     require('connect.php');
 
 	// If logout is clicked, logs the user out by destroying current session and unsetting the session variable.
@@ -17,6 +18,49 @@
 
      // Execution on the DB server is delayed until we execute().
      $statement->execute();
+
+     $admin = false;
+
+     if (isset($_SESSION['user'])) {
+		$user = $_SESSION['user'];
+
+		if ($user["username"] != 'admin') {
+			header('Location: class.php');
+		}
+		else {
+			$admin = true;
+
+			$amount = filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_FLOAT);
+			$style = filter_input(INPUT_POST, 'style', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$instructor = filter_input(INPUT_POST, 'instructor', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$amount = filter_input(INPUT_POST, 'amount', FILTER_SANITIZE_NUMBER_FLOAT);
+			$error_string = false;
+
+			if ($_POST && !empty($style) && !empty($instructor)) {
+				$classid = filter_input(INPUT_POST,'classid', FILTER_SANITIZE_NUMBER_INT);
+				
+				if ($_POST['command']=='Update')
+				{
+					$query = "UPDATE classes SET style = :style, instructor = :instructor, amount = :amount WHERE classid = :classid";
+					$statement = $db->prepare($query);
+				    $statement->bindValue(':style',$style);
+				    $statement->bindValue(':instructor',$instructor);
+				    $statement->bindValue(':amount', $amount);
+				    $statement->bindValue(':classid', $classid, PDO::PARAM_INT);
+				}
+				else if ($_POST['command']=='Delete')
+				{
+					$query = "DELETE FROM classes WHERE classid = :classid";
+					$statement = $db->prepare($query);
+					$statement->bindValue(':classid', $classid, PDO::PARAM_INT);
+				}
+
+				if ($statement->execute()) {
+	 	    		header('Location: classes.php');   
+	  			}
+			}
+		}
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -35,11 +79,27 @@
 		<!-- Fetchs all rows from the statement object -->
 		<?php while ($row = $statement->fetch()): ?>
 			<?php if ($_GET['classid'] == $row['classid']): ?>
-				<div class="class">
-				    <h2><?= $row['style'] ?></a></h2>
-				    <p>Instructor: <?= $row['instructor'] ?></p>
-				    <p>Amount: <?= $row['amount'] ?></p>
-				</div>
+				<form action="class.php" method="post">
+					<fieldset>
+					    <p></p>
+					    	<label>Style</label>
+					    	<input type="style" name="style" value="<?= $row['style'] ?>" />
+					    </p>
+					    <p>
+					    	<label>Instructor</label>
+					    	<input type="instructor" name="instructor" value="<?= $row['instructor'] ?>" />
+					    </p>
+					    <p>
+					    	<label>Amount</label>
+					    	<input type="amount" name="amount" value="<?= $row['amount'] ?>" />
+					    </p>
+					    <?php if ($admin == true): ?>
+					    	<input type="hidden" name="classid" value='<?php echo $row['classid']?>'/>
+					    	<input type="submit" name="command" value="Update" />
+					    	<input type="submit" name="command" value="Delete" onclick="return confirm('Are you sure you wish to delete this post?')" />
+					    <?php endif ?>
+					</fieldset>
+				</form>
 			<?php endif ?>
 		<?php endwhile ?>
     <footer>

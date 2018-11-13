@@ -55,12 +55,15 @@
 	  	if (/*$username_error == false && $email_error == false && */$password_error == false){
 			if (isset($_POST['new_user']) && !empty($name) && !empty($email) && !empty($username) && !empty($password_1)){
 
+				//Hashes the password and inserts it into the database.
+				$passwordHash = password_hash($password_1, PASSWORD_DEFAULT);
+
 				$query = "INSERT INTO users (name, email, username, password) VALUES (:name, :email, :username, :password)";
 				$statement = $db->prepare($query);
 		        $statement->bindValue(':name', $name);
 		        $statement->bindValue(':email', $email);
 		        $statement->bindValue(':username', $username);
-		        $statement->bindValue(':password', $password_1);
+		        $statement->bindValue(':password', $passwordHash);
 
 			    if ($statement->execute()) {
 			 	    header('Location: login.php');   
@@ -92,18 +95,23 @@
 		if ($username_empty != true && $password_empty != true) {
 			
 			// Grab rows where username and password match with the username and password entered.
-			$query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+			$query = "SELECT * FROM users WHERE username='$username'";
 			$statement = $db->prepare($query);
 			$statement->execute();
 			$user = $statement->fetch();
 
+			$userPassHash = $user['password'];
+
 			// Only one row should be returned and therefore username will be stored in a session variable.
 			if ($statement->rowCount() == 1) {
-				$_SESSION['user'] = $user;
-				$_SESSION['success'] = "You are now logged in";
+				//Checks if the password the user entered and the hashed password matches.
+				if (password_verify($password, $userPassHash)) {
+					$_SESSION['user'] = $user;
+					$_SESSION['success'] = "You are now logged in";
 
-				// Send back to main page after logging in successfully.
-				header('Location: index.php');
+					// Send back to main page after logging in successfully.
+					header('Location: index.php');
+				}
 			}
 			else {
 				$login_error = true;

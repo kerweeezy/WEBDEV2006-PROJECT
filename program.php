@@ -38,7 +38,7 @@
 			if ($_POST && !empty($difficulty_level) && !empty($description)) {
 				$programid = filter_input(INPUT_POST,'programid', FILTER_SANITIZE_NUMBER_INT);
 				
-				// Updates class info.
+				// Updates program info.
 				if ($_POST['command']=='Update')
 				{
 					$query = "UPDATE programs SET difficulty_level = :difficulty_level, description = :description, amount = :amount WHERE programid = :programid";
@@ -48,7 +48,7 @@
 				    $statement->bindValue(':amount', $amount);
 				    $statement->bindValue(':programid', $programid, PDO::PARAM_INT);
 				}
-				// Deletes the class by classid.
+				// Deletes the program by programid.
 				else if ($_POST['command']=='Delete')
 				{
 					$query = "DELETE FROM programs WHERE programid = :programid";

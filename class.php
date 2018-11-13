@@ -65,7 +65,7 @@
 	}
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="E"N>
 <head>
     <meta charset="utf-8">
     <title>JSON Urban Dance Studio</title>

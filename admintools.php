@@ -11,6 +11,7 @@
 	}
 
 ?>
+<!-- This page is only accessible to the admin -->
 <!DOCTYPE html>
 <html lang="EN">
 <head>

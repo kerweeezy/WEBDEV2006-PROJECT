@@ -78,7 +78,7 @@
 			<a href="index.php"><h2>JSON</h2><h3> Urban Dance Studio</h3></a><h1>.</h1>
 			<?php include('nav.php') ?>
 		</header>
-		<!-- Fetchs all rows from the statement object -->
+		<!-- Fetches all rows from the statement object -->
 		<?php while ($row = $statement->fetch()): ?>
 			<?php if ($_GET['classid'] == $row['classid']): ?>
 				<form action="class.php" method="post">

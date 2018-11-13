@@ -26,8 +26,8 @@
 			 --><li><a href="classes.php">Classes</a></li><!--
 			 --><li><a href="programs.php">Programs</a></li><!--
 			 --><li><a href="index.php?logout='1'">Logout</a></li><!--
-			 --><li><a href="">About Us</a></li><!--
-			 --><li><a href="">Contact Us</a></li>
+			 --><li><a href="about.php">About Us</a></li><!--
+			 --><li><a href="contact.php">Contact Us</a></li>
 			</ul>
 		<?php endif ?>
 	<?php else: ?>
@@ -36,8 +36,8 @@
 		 --><li><a href="classes.php">Classes</a></li><!--
 		 --><li><a href="programs.php">Programs</a></li><!--
 		 --><li><a href="login.php">Sign In</a></li><!--
-		 --><li><a href="">About Us</a></li><!--
-		 --><li><a href="">Contact Us</a></li>
+		 --><li><a href="about.php">About Us</a></li><!--
+		 --><li><a href="contact.php">Contact Us</a></li>
 		</ul>
 	<?php endif ?>
 </nav>

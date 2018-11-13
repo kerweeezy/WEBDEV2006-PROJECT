@@ -1,5 +1,6 @@
 <?php
 	session_start();
+
 	require('connect.php');
 
 	// If logout is clicked, logs the user out.
@@ -9,6 +10,7 @@
 		header('Location: index.php');
 	}
 
+	// Grabs all classes from the database.
 	$query = "SELECT * FROM classes ORDER BY classid ASC";
     $statement = $db->prepare($query);
     $statement->execute();
@@ -28,6 +30,7 @@
 			<?php include('nav.php') ?>
 		</header>
 		<div id="content">
+			<!-- Show the classes if row count is greater than 0. -->
 			<?php if ($statement->rowCount()!= 0): ?>
 		        <ul>
 		          	<?php while($row = $statement->fetch()): ?>

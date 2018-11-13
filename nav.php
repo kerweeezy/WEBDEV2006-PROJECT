@@ -1,10 +1,18 @@
 <?php
-	
+	$admin = false;
+
+	if (isset($_SESSION['user'])) {
+		$user = $_SESSION['user'];
+
+		if ($user["username"] == 'admin') {
+			$admin = true;
+		}
+	}
 ?>
 <nav id="navigation">
 	<!-- Changes sign in/logout nav option depending if a user or the admin is signed in. -->
 	<?php if (isset($_SESSION['username'])): ?>
-		<?php if ($_SESSION['username'] == 'admin'): ?>
+		<?php if ($admin == true): ?>
 			<ul>
 				<li><a href="index.php">Home</a></li><!--
 			 --><li><a href="classes.php">Classes</a></li><!--

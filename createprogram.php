@@ -2,15 +2,19 @@
 	session_start();
 	
 	// If unauthorized user tries to access the page, they are redirected to the home page.
-	if (($_SESSION['username']) != 'admin') {
-		header('Location: h.php');
+	if (isset($_SESSION['user'])) {
+		$user = $_SESSION['user'];
+
+		if ($user["username"] == 'admin') {
+			header('Location: index.php');
+		}
 	}
 
 	// If logout is clicked, logs the user out.
 	if (isset($_GET['logout'])) {
 		session_destroy();
-		unset($_SESSION['username']);
-		header('Location: h.php');
+		unset($_SESSION['user']);
+		header('Location: index.php');
 	}
 ?>
 <!DOCTYPE html>
@@ -19,6 +23,7 @@
 	<meta charset="utf-8">
 	<title>JSON Urban Dance Studio</title>
 	<link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
 	<div id="container">

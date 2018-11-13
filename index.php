@@ -4,7 +4,7 @@
 	// If logout is clicked, logs the user out.
 	if (isset($_GET['logout'])) {
 		session_destroy();
-		unset($_SESSION['username']);
+		unset($_SESSION['user']);
 		header('Location: index.php');
 	}
 ?>

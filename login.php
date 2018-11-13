@@ -6,7 +6,7 @@
 	// If logout is clicked, logs the user out.
 	if (isset($_GET['logout'])) {
 		session_destroy();
-		unset($_SESSION['username']);
+		unset($_SESSION['user']);
 		header('Location: index.php');
 	}
 
@@ -57,10 +57,10 @@
 
 				$query = "INSERT INTO users (name, email, username, password) VALUES (:name, :email, :username, :password)";
 				$statement = $db->prepare($query);
-		        $statement->bindValue(':name',$name);
-		        $statement->bindValue(':email',$email);
-		        $statement->bindValue(':username',$username);
-		        $statement->bindValue(':password',$password_1);
+		        $statement->bindValue(':name', $name);
+		        $statement->bindValue(':email', $email);
+		        $statement->bindValue(':username', $username);
+		        $statement->bindValue(':password', $password_1);
 
 			    if ($statement->execute()) {
 			 	    header('Location: login.php');   
@@ -95,10 +95,11 @@
 			$query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
 			$statement = $db->prepare($query);
 			$statement->execute();
+			$user = $statement->fetch();
 
 			// Only one row should be returned and therefore username will be stored in a session variable.
 			if ($statement->rowCount() == 1) {
-				$_SESSION['username'] = $username;
+				$_SESSION['user'] = $user;
 				$_SESSION['success'] = "You are now logged in";
 
 				// Send back to main page after logging in successfully.

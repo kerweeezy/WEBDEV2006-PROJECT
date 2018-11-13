@@ -35,10 +35,27 @@
 		</header>
 		<?php while ($row = $statement->fetch()): ?>
 			<?php if ($_GET['programid'] == $row['programid']): ?>
-				<div class="class">
-				  	<h2><?= $row['difficulty_level'] ?></a></h2>
-				  	<p><?= $row['amount'] ?></p>
-				</div>
+				<form action="program.php" method="post">
+					<fieldset>
+					    <p></p>
+					    	<label>Difficulty Level</label>
+					    	<input type="difficulty_level" name="difficulty_level" value="<?= $row['difficulty_level'] ?>" />
+					    </p>
+					    <p>
+					    	<label>Amount</label>
+					    	<input type="amount" name="amount" value="<?= $row['amount'] ?>" />
+					    </p>
+					    <p>
+					    	<label>Description</label>
+					    	<textarea name="description" id="description"><?= $row['description'] ?></textarea>
+					    </p>
+					    <?php if ($admin == true): ?>
+					    	<input type="hidden" name="programid" value='<?php echo $row['programid']?>'/>
+					    	<input type="submit" name="command" value="Update" />
+					    	<input type="submit" name="command" value="Delete" onclick="return confirm('Are you sure you wish to delete this post?')" />
+					    <?php endif ?>
+					</fieldset>
+				</form>
 			<?php endif ?>
 		<?php endwhile ?>
         <footer>

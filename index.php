@@ -5,7 +5,7 @@
 	if (isset($_GET['logout'])) {
 		session_destroy();
 		unset($_SESSION['username']);
-		header('Location: h.php');
+		header('Location: index.php');
 	}
 ?>
 <!DOCTYPE html>
@@ -14,11 +14,12 @@
 	<meta charset="utf-8">
 	<title>JSON Urban Dance Studio</title>
 	<link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
 	<div id="container">
 		<header id="header">
-			<a href="h.php"><h2>JSON</h2><h3> Urban Dance Studio</h3></a><h1>.</h1>
+			<a href="index.php"><h2>JSON</h2><h3> Urban Dance Studio</h3></a><h1>.</h1>
 			<?php include('nav.php') ?>
 		</header>
 		<div id="content">
@@ -38,7 +39,7 @@
 		<footer>
 			<nav id="navfooter">
 				<ul>
-					<li><a href="h.php">Home</a></li><!--
+					<li><a href="index.php">Home</a></li><!--
 				 --><li><a href="">About Us</a></li><!--
 				 --><li><a href="">Contact Us</a></li>
 				</ul>

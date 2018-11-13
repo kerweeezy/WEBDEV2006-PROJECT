@@ -1,5 +1,7 @@
 <?php
 	session_start();
+
+	require('connect.php');
 	
 	// If unauthorized user tries to access the page, they are redirected to the home page.
 	if (isset($_SESSION['user'])) {
@@ -13,8 +15,38 @@
 	// If logout is clicked, logs the user out.
 	if (isset($_GET['logout'])) {
 		session_destroy();
-		unset($_SESSION['user']);
+		unset($_SESSION['username']);
 		header('Location: index.php');
+	}
+
+	// Declare variables
+	$success = false;
+
+	// Registering a new user
+	if (isset($_POST['new_program'])) {
+
+		// Filter and sanitize the inputs.
+		$amount = filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_FLOAT);
+		$difficulty_level = filter_input(INPUT_POST, 'difficulty_level', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$amount = filter_input(INPUT_POST, 'amount', FILTER_SANITIZE_NUMBER_FLOAT);
+
+		$userid = $_SESSION['user']['userid'];
+		
+		if (!empty($difficulty_level) && !empty($amount) && !empty($description)){
+			$query = "INSERT INTO programs (userid, difficulty_level, amount, description) VALUES (:userid, :difficulty_level, :amount, :description)";
+			$statement = $db->prepare($query);
+			$statement->bindValue(':userid', $userid);
+		    $statement->bindValue(':difficulty_level', $difficulty_level);
+		    $statement->bindValue(':amount', $amount);
+		    $statement->bindValue(':description', $description);
+
+			if ($statement->execute()) {
+			 	header('Location: createprogram.php');
+			 	$success = true;
+			}
+			exit;
+		}
 	}
 ?>
 <!DOCTYPE html>
@@ -36,7 +68,7 @@
   				<h2>Create A Program</h2>
   			</div>
 	
-		  	<form method="post" action="createclass.php">
+		  	<form method="post" action="createprogram.php">
 		  		<div">
 		  	  		<label>Difficulty Level</label>
 		  	  		<input type="text" name="difficulty_level">
@@ -50,9 +82,12 @@
 		  	  		<input type="text" name="description">
 		  		</div>
 		  		<div>
-		  	  		<button type="submit" class="btn" name="reg_user">Create</button>
+		  	  		<button type="submit" class="btn" name="new_program">Create</button>
 		  		</div>
-		  </form>
+		  	</form>
+		  	<?php if ($success == true): ?>
+		  		<h5>Program successfully added.</h5>
+		  	<?php endif	?>
 		</div>
 		<footer>
 			<nav id="navfooter">

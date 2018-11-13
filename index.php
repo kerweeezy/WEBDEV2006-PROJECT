@@ -25,12 +25,12 @@
 		<div id="content">
 			<!-- Notification message, display that the user has successfully logged in. -->
 			<?php if (isset($_SESSION['success'])): ?>
-				<h3>
+				<h4>
 					<?php
 						echo $_SESSION['success'];
 						unset($_SESSION['success']);
 					?>
-				</h3>
+				</h4>
 			<?php endif ?>
 			<p id="p1">REGISTER FOR OUR CLASSES AND PROGRAMS.</p>
 			<div id="fixedbg"></div>

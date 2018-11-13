@@ -66,7 +66,8 @@
 		        $statement->bindValue(':password', $passwordHash);
 
 			    if ($statement->execute()) {
-			 	    header('Location: login.php');   
+			 	    header('Location: login.php');
+			 	    $_SESSION['registersuccess'] = "Registration Completed";
 			  	}
 			    exit;
 			}
@@ -192,6 +193,14 @@
 		  	  		<button type="submit" name="new_user">Register</button>
 		  		</div>
 		  	</form>
+		  	<?php if (isset($_SESSION['registersuccess'])): ?>
+				<h4>
+					<?php
+						echo $_SESSION['registersuccess'];
+						unset($_SESSION['registersuccess']);
+					?>
+				</h4>
+			<?php endif ?>
 		</div>
 		<footer>
 			<nav id="navfooter">

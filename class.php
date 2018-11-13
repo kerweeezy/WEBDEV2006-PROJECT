@@ -25,7 +25,7 @@
 		$user = $_SESSION['user'];
 
 		if ($user["username"] != 'admin') {
-			header('Location: class.php');
+			header('Location: classes.php');
 		}
 		else {
 			$admin = true;

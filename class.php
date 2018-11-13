@@ -39,6 +39,7 @@
 			if ($_POST && !empty($style) && !empty($instructor)) {
 				$classid = filter_input(INPUT_POST,'classid', FILTER_SANITIZE_NUMBER_INT);
 				
+				// Updates class info.
 				if ($_POST['command']=='Update')
 				{
 					$query = "UPDATE classes SET style = :style, instructor = :instructor, amount = :amount WHERE classid = :classid";
@@ -48,6 +49,7 @@
 				    $statement->bindValue(':amount', $amount);
 				    $statement->bindValue(':classid', $classid, PDO::PARAM_INT);
 				}
+				// Deletes the class by classid.
 				else if ($_POST['command']=='Delete')
 				{
 					$query = "DELETE FROM classes WHERE classid = :classid";

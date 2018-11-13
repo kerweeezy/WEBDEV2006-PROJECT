@@ -100,6 +100,7 @@
 			$statement->execute();
 			$user = $statement->fetch();
 
+			//Grabs the hashed password.
 			$userPassHash = $user['password'];
 
 			// Only one row should be returned and therefore username will be stored in a session variable.

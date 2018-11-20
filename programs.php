@@ -15,7 +15,7 @@
 
     $commentquery = "SELECT * FROM program comments";
     $comments = $db->prepare($commentquery);
-    $comments->execute(); 
+    $comments->execute();
 ?>
 <!DOCTYPE html>
 <html lang="EN">
@@ -43,12 +43,19 @@
 		                			<li>Description: <?= $row['description'] ?></li>
 		                		</ul>
 		                	</div>
+		                	<form method="process_postprogram" action="programs.php">
+						        <label for="content" ></label>
+						        <input id="content" name="content" placeholder="Leave comment here...">
+						        <input type="hidden" name="username" value="<?= $row['user'] ?>" />
+						        <input class="submit" name="command" type="submit">
+    						</form>
 		                	<?php if ($comments->rowCount() != 0): ?>
 							    <div>
 							        <?php while ($row = $comments->fetch()): ?>
 							        	<small>
+							        		<?= $row['username'] ?>
 				        					<?= $row['date'] ?>
-				        					<a href="edit.php?id=<?= $row['id'] ?>">edit</a>
+				        					<a href="edit.php?id=<?= $row['commentid'] ?>">edit</a>
 				        				</small>
 							            <p><?= $row['content'] ?></p>
 							        <?php endwhile ?>

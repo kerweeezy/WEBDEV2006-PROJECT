@@ -64,7 +64,7 @@
 	}
 	else
 	{
-		header('Location: index.php');
+		header('Location: programs.php');
 	}
 ?>
 <!DOCTYPE html>

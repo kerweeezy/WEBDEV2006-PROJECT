@@ -12,6 +12,10 @@
 	$query = "SELECT * FROM programs ORDER BY programid ASC";
     $statement = $db->prepare($query);
     $statement->execute();
+
+    $commentquery = "SELECT * FROM program comments";
+    $comments = $db->prepare($commentquery);
+    $comments->execute(); 
 ?>
 <!DOCTYPE html>
 <html lang="EN">
@@ -39,6 +43,17 @@
 		                			<li>Description: <?= $row['description'] ?></li>
 		                		</ul>
 		                	</div>
+		                	<?php if ($comments->rowCount() != 0): ?>
+							    <div>
+							        <?php while ($row = $comments->fetch()): ?>
+							        	<small>
+				        					<?= $row['date'] ?>
+				        					<a href="edit.php?id=<?= $row['id'] ?>">edit</a>
+				        				</small>
+							            <p><?= $row['content'] ?></p>
+							        <?php endwhile ?>
+							    </div>
+							<?php endif ?>
 		              	</div>
 		          	<?php endwhile ?>
 		      </ul>

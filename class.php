@@ -63,6 +63,10 @@
 			}
 		}
 	}
+	else
+	{
+		header('Location: class.php');
+	}
 ?>
 <!DOCTYPE html>
 <html lang="E"N>

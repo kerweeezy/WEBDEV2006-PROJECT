@@ -27,7 +27,7 @@
 			<?php while ($row = $statement->fetch()): ?>
 				<?php if ($_GET['id'] == $row['id']): ?>
 				    <div id="all_blogs">
-				      	<form action="process_postprogram.php" method="post">
+				      	<form method="post" action="process_postprogram.php">
 				        	<fieldset>
 					          	<legend>Edit Comment</legend>
 					          	<p>

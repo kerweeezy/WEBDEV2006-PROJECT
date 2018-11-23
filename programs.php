@@ -16,6 +16,7 @@
     $commentquery = "SELECT * FROM program comments";
     $comments = $db->prepare($commentquery);
     $comments->execute();
+    $comment = $comments->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="EN">
@@ -43,23 +44,24 @@
 		                			<li>Description: <?= $row['description'] ?></li>
 		                		</ul>
 		                	</div>
-		                	<form method="process_postprogram" action="programs.php">
+		                	<form method="post" action="process_postprogram.php">
 						        <label for="content" ></label>
 						        <input id="content" name="content" placeholder="Leave comment here...">
-						        <input type="hidden" name="username" value="<?= $row['user'] ?>" />
-						        <input class="submit" name="command" type="submit">
+						        <input class="submit" name="command" type="submit" value="Comment">
     						</form>
 		                	<?php if ($comments->rowCount() != 0): ?>
-							    <div>
-							        <?php while ($row = $comments->fetch()): ?>
-							        	<small>
-							        		<?= $row['username'] ?>
-				        					<?= $row['date'] ?>
-				        					<a href="edit.php?id=<?= $row['commentid'] ?>">edit</a>
-				        				</small>
-							            <p><?= $row['content'] ?></p>
-							        <?php endwhile ?>
-							    </div>
+								<?php while ($comment = $comments->fetch()): ?>
+									<?php if ($row['programid'] == $comment['programid']): ?>
+										<div>
+								        	<small>
+								        		<?= $row['username'] ?>
+					        					<?= $row['date'] ?>
+					        					<a href="edit.php?id=<?= $row['commentid'] ?>">edit</a>
+					        				</small>
+								            <p><?= $row['content'] ?></p>
+								    	</div>
+								    <?php endif ?>
+								<?php endwhile ?>
 							<?php endif ?>
 		              	</div>
 		          	<?php endwhile ?>

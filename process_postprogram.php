@@ -5,14 +5,13 @@
 	// If logout is clicked, logs the user out.
 	if (isset($_GET['logout'])) {
 		session_destroy();
-		unset($_SESSION['username']);
+		unset($_SESSION['user']);
 		header('Location: index.php');
 	}
 
 	$content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-	$user = ($_SESSION['username']);
+	$user = ($_SESSION['user']);
 	$username = $user['username'];
-	$error_string = false;
 
 	if ($_POST && !empty($content)) {
 		$commentid = filter_input(INPUT_POST,'commentid', FILTER_SANITIZE_NUMBER_INT);
@@ -30,19 +29,17 @@
 			$statement = $db->prepare($query);
 			$statement->bindValue(':commentid', $commentid, PDO::PARAM_INT);
 		}
-		else
+		else if ($_POST['command']=='Comment')
 		{
-			$query = "INSERT INTO program comments (content) VALUES (:content)";
+			$query = "INSERT INTO program comments (content, username) VALUES (:content, :username)";
 			$statement = $db->prepare($query);
         	$statement->bindValue(':content',$content);
+        	$statement->bindValue(':username',$username);
 		}
+
 	    if ($statement->execute()) {
-	 	    header('Location: index.php');   
+	 	    header('Location: programs.php');   
 	  	}
-	    exit;
-	}
-	else {
-		$error_string=true;
 	}
 ?>
 
@@ -50,24 +47,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Error</title>
-    <link rel="stylesheet" href="http://stungeye.com/school/blog/style.css" type="text/css">
+    <title></title>
 </head>
 <body>
-    <div id="wrapper">
-        <div id="header">
-            <h1><a href="index.php"></a></h1>
-        </div>
-
-        <?php if ($error_string): ?>
-			<h1>An error occured while processing your post.</h1>
-		  	<p>Both the title and content must be at least one character.  </p>
-			<a href="index.php">Return Home</a>
-		<?php endif ?>
-
-		<div id="footer">
-	        Something about legal stuff
-	  	</div> 
-    </div>
 </body>
 </html>

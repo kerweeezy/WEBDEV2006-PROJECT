@@ -19,6 +19,40 @@
     $statement->execute(); 
 
     $row = $statement->fetch();
+
+    //This section is to update, and delete comments
+
+    $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	$user = ($_SESSION['user']);
+	$username = $user['username'];
+	$commentid = filter_input(INPUT_POST,'commentid', FILTER_SANITIZE_NUMBER_INT);
+
+	if ($_POST) {
+		if ($_POST['command'] == 'Update') {
+			$query = "UPDATE programcomments SET content = :content WHERE commentid = :commentid";	
+			$updated = $db->prepare($query);	
+			$updated->bindValue(':content',$content);
+			$updated->bindValue(':commentid', $commentid, PDO::PARAM_INT);
+			$updated->execute();
+
+			header('Location: showprogram.php?programid'.$programid);
+		}
+		else {
+			$_SESSION['comment_error'] = 'There was an error updating your comment';  
+		}	
+		
+		if ($_POST['command'] == 'Delete') {
+			$query = "DELETE FROM programcomments WHERE commentid = :commentid";
+			$deleted = $db->prepare($query);
+			$deleted->bindValue(':commentid', $commentid, PDO::PARAM_INT);
+			$deleted->execute();
+
+			header('Location: showprogram.php?programid'.$programid);
+		}
+		else {
+			$_SESSION['comment_error'] = 'There was an error deleting your comment';
+		}
+	}
 ?>
 <!DOCTYPE html>
 <html lang="EN">
@@ -36,11 +70,12 @@
 		</header>
 		<div id="content">
 			<div>
-				<form method="post" action="process_postprogram.php">
+				<form method="post" action="editprogram.php">
 				    <fieldset>
 						<legend>Edit Comment</legend>
 					        <p>
 					            <label for="content">Content</label>
+					            <p></p>
 					            <textarea name="content" id="content"><?= $row['content'] ?></textarea>
 					        </p>
 					        <p>

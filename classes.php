@@ -35,12 +35,9 @@
 		        <ul>
 		          	<?php while($row = $statement->fetch()): ?>
 		              	<div class="class">
-		                	<h2><a href='class.php?classid=<?= $row['classid']?>'><?=$row['style']?></a></h2>
+		                	<h2><a href='showclass.php?classid=<?= $row['classid']?>'><?=$row['style']?></a></h2>
 		                	<div>
-		                		<ul>
-		                			<li>Instructor: <?= $row['instructor'] ?></li>
-		                			<li>Amount: <?= $row['amount'] ?></li>
-		                		</ul>
+		                		<p>Instructor: <?= $row['instructor'] ?></p>
 		                	</div>
 		              	</div>
 		          	<?php endwhile ?>

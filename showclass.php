@@ -8,27 +8,27 @@
 		unset($_SESSION['username']);
 		header('Location: index.php');
 	}
-
+    
     // SQL is written as a String.
-    $query = "SELECT * FROM programs ORDER BY programid DESC"; 
+    $query = "SELECT * FROM classes ORDER BY classid DESC"; 
     $statement = $db->prepare($query);
     $statement->execute();
 
-    $programid = $_GET['programid'];
+    $classid = $_GET['classid'];
 
-    $commentquery = "SELECT * FROM programcomments, programs WHERE programcomments.programid = :programid AND programcomments.programid = programs.programid ORDER BY commentid DESC";
+    $commentquery = "SELECT * FROM classcomments, classes WHERE classcomments.classid = :classid AND classcomments.classid = classes.classid ORDER BY commentid DESC";
     $comments = $db->prepare($commentquery);
-    $comments->bindValue(':programid', $programid, PDO::PARAM_INT);
+    $comments->bindValue(':classid', $classid, PDO::PARAM_INT);
     $comments->execute();
 
     $count = 0;		
 
     //This section is to insert comments
     if ($_POST) {
-
 	    $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		$user = ($_SESSION['user']);
-		
+
 		if (empty($user)) {
 			$username = $name;
 		}
@@ -36,18 +36,18 @@
 			$username = $user['username'];
 		}
 
-		$programid = filter_input(INPUT_POST,'programid', FILTER_SANITIZE_NUMBER_INT);
+		$classid = filter_input(INPUT_POST,'classid', FILTER_SANITIZE_NUMBER_INT);
 		$commentid = filter_input(INPUT_POST,'commentid', FILTER_SANITIZE_NUMBER_INT);
-
+		
 		if ($_POST) {
-			$query = "INSERT INTO programcomments (programid, content, username) VALUES (:programid, :content, :username)";
+			$query = "INSERT INTO classcomments (classid, content, username) VALUES (:classid, :content, :username)";
 			$commented = $db->prepare($query);
-			$commented->bindValue(':programid', $programid);
+			$commented->bindValue(':classid', $classid);
 	        $commented->bindValue(':content', $content);
 	        $commented->bindValue(':username', $username);
 	        $commented->execute();
 
-	        header('Location: showprogram.php?programid'.$programid);
+	        header('Location: showclass.php?classid='.$classid);
 		}
 		else {
 			$_SESSION['comment_error'] = 'There was an error submitting your comment';
@@ -69,26 +69,25 @@
 			<?php include('nav.php') ?>
 		</header>
 		<?php while ($row = $statement->fetch()): ?>
-			<?php if ($_GET['programid'] == $row['programid']): ?>
+			<?php if ($_GET['classid'] == $row['classid']): ?>
 				<div>
-		            <h2><a href='showprogram.php?programid=<?= $row['programid']?>'><?= $row['difficulty_level'] ?></a></h2>
+		            <h2><a href='showclass.php?classid=<?= $row['classid']?>'><?= $row['style'] ?></a></h2>
 		               	<div>
 		                	<ul>
 		                		<li>Amount: <?= $row['amount'] ?></li>
-		                		<li>Description: <?= $row['description'] ?></li>
+		                		<li>Instructor: <?= $row['instructor'] ?></li>
 		                	</ul>
 		                </div>
-		                <form method="post" action="showprogram.php">
+		                <form method="post" action="showclass.php">
 						    <label for="content" ></label>
 						    <textarea id="content" name="content" placeholder="Leave comment here..." ></textarea>
 						    <?php if (!isset($_SESSION['user'])): ?>
 						    	<input type="text" name="name" placeholder="Insert Name" required="Please fill out this field">
 						    <?php endif ?>
-						    <input type="hidden" name="programid" value='<?= $row['programid'] ?>'/>
-						    <!--<img src="' . $_SESSION['captcha']['image_src'] . '" alt="CAPTCHA" />-->
+						    <input type="hidden" name="classid" value='<?= $row['classid'] ?>'/>
 						    <input class="submit" name="command" type="submit" value="Comment">
     					</form>
-    						<!-- Show comments per program -->
+    						<!-- Show comments per class -->
 		                <?php if ($comments->rowCount() != 0): ?>
 							<?php while ($comment = $comments->fetch()): ?>
 								<?php $count++; ?>
@@ -99,7 +98,7 @@
 						        				<?= date('F d, Y, h:i a',strtotime($comment['date']))?>
 						        				<?php if (isset($_SESSION['user'])): ?>
 						        					<?php if ($user['username'] == 'admin' || $user['username'] == $username): ?>
-						        						<a href="editprogram.php?commentid=<?= $comment['commentid'] ?>">edit</a>
+						        						<a href="editclass.php?commentid=<?= $comment['commentid'] ?>">edit</a>
 						        					<?php endif ?>
 						        				<?php endif ?>
 						        			</small>

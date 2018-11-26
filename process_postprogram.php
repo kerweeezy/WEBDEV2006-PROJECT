@@ -12,43 +12,43 @@
 	$content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$user = ($_SESSION['user']);
 	$username = $user['username'];
+	$programid = filter_input(INPUT_POST,'programid', FILTER_SANITIZE_NUMBER_INT);
 
-	if ($_POST && !empty($content)) {
-		$commentid = filter_input(INPUT_POST,'commentid', FILTER_SANITIZE_NUMBER_INT);
-		
-		if ($_POST['command']=='Update')
-		{
-			$query = "UPDATE program comments SET content = :content WHERE commentid=:commentid";
-			$statement = $db->prepare($query);
-		    $statement->bindValue(':content',$content);
-		    $statement->bindValue(':commentid', $commentid, PDO::PARAM_INT);
-		}
-		else if ($_POST['command']=='Delete')
-		{
-			$query = "DELETE FROM program comments WHERE commentid = :commentid";
-			$statement = $db->prepare($query);
-			$statement->bindValue(':commentid', $commentid, PDO::PARAM_INT);
-		}
-		else if ($_POST['command']=='Comment')
-		{
-			$query = "INSERT INTO program comments (content, username) VALUES (:content, :username)";
-			$statement = $db->prepare($query);
-        	$statement->bindValue(':content',$content);
-        	$statement->bindValue(':username',$username);
-		}
+	/*
+	if ($_POST['command']=='Update') {
+		$query = "UPDATE programcomments SET content = :content WHERE commentid=:commentid";	
+		$updated = $db->prepare($query);	
+		$updated->bindValue(':content',$content);
+		$updated->bindValue(':commentid', $commentid, PDO::PARAM_INT);    
+	}	
+	else if ($_POST['command']=='Delete') {
+		$query = "DELETE FROM programcomments WHERE commentid = :commentid";
+		$deleted = $db->prepare($query);
+		$deleted->bindValue(':commentid', $commentid, PDO::PARAM_INT);
+	}*/
+	
+	if ($_POST['command']=='Comment') {
+		$query = "INSERT INTO programcomments (programid, content, username) VALUES (:programid, :content, :username)";
+		$commented = $db->prepare($query);
+		$commented->bindValue(':programid', $programid);
+        $commented->bindValue(':content', $content);
+        $commented->bindValue(':username', $username);
+        $commented->execute();
 
-	    if ($statement->execute()) {
-	 	    header('Location: programs.php');   
-	  	}
+        header('Location: programs.php');
 	}
+	else {
+		$_SESSION['comment_error'] = 'There was an error submitting your comment';
+	}		
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>hello</title>
 </head>
 <body>
+	<p><?= $programid ?></p>
 </body>
 </html>

@@ -8,6 +8,17 @@
 		unset($_SESSION['username']);
 		header('Location: index.php');
 	}
+
+	if (!($commentid = filter_input(INPUT_GET,'commentid', FILTER_SANITIZE_NUMBER_INT))) {
+		header('Location: programs.php'); 
+	}
+
+    $query = "SELECT * FROM programcomments WHERE commentid = :commentid";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':commentid', $commentid, PDO::PARAM_INT);
+    $statement->execute(); 
+
+    $row = $statement->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="EN">
@@ -24,30 +35,22 @@
 			<?php include('nav.php') ?>
 		</header>
 		<div id="content">
-			<?php while ($row = $statement->fetch()): ?>
-				<?php if ($_GET['id'] == $row['id']): ?>
-				    <div id="all_blogs">
-				      	<form method="post" action="process_postprogram.php">
-				        	<fieldset>
-					          	<legend>Edit Comment</legend>
-					          	<p>
-					            	<label for="title">Title</label>
-					            	<input name="title" id="title" value="<?= $row['title'] ?>" />
-					          	</p>
-					          	<p>
-					            	<label for="content">Content</label>
-					            	<textarea name="content" id="content"><?= $row['content'] ?></textarea>
-					          	</p>
-					          	<p>
-					            	<input type="hidden" name="id" value="<?= $row['id'] ?>" />
-					            	<input type="submit" name="command" value="Update" />
-					            	<input type="submit" name="command" value="Delete" onclick="return confirm('Are you sure you wish to delete this post?')" />
-					          	</p>
-				        	</fieldset>
-				      	</form>
-				    </div>
-				<?php endif ?>
-			<?php endwhile ?>
+			<div>
+				<form method="post" action="process_postprogram.php">
+				    <fieldset>
+						<legend>Edit Comment</legend>
+					        <p>
+					            <label for="content">Content</label>
+					            <textarea name="content" id="content"><?= $row['content'] ?></textarea>
+					        </p>
+					        <p>
+					            <input type="hidden" name="commentid" value="<?= $row['commentid'] ?>" />
+					            <input type="submit" name="command" value="Update" />
+					            <input type="submit" name="command" value="Delete" onclick="return confirm('Are you sure you wish to delete this post?')" />
+					         </p>
+				    </fieldset>
+				</form>
+			</div>
 		</div>
 		<footer>
 			<nav id="navfooter">

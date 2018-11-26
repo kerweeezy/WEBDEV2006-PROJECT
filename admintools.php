@@ -30,8 +30,8 @@
 			<ul>
 				<li><a href="createclass.php">Add New Class</a></li>
 				<li><a href="createprogram.php">Add New Program</a></li>
-				<li><a href="">Modify Class</a></li>
-				<li><a href="">Modify Program</a></li>
+				<li><a href="class.php">Modify Class</a></li>
+				<li><a href="program.php">Modify Program</a></li>
 			</ul>
 		</div>
 		<footer>

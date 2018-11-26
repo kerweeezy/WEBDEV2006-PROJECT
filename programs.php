@@ -11,13 +11,7 @@
 	
 	$query = "SELECT * FROM programs ORDER BY programid ASC";
     $statement = $db->prepare($query);
-    $statement->execute();
-
-    $commentquery = "SELECT * FROM programcomments ORDER BY commentid DESC";
-    $comments = $db->prepare($commentquery);
-    $comments->execute();
-
-    $count = 0;						
+    $statement->execute();				
 ?>
 <!DOCTYPE html>
 <html lang="EN">
@@ -38,41 +32,7 @@
 		        <ul>
 		          	<?php while($row = $statement->fetch()): ?>
 		              	<div>
-		                	<h2><a href='program.php?programid=<?= $row['programid']?>'><?= $row['difficulty_level'] ?></a></h2>
-		                	<div>
-		                		<ul>
-		                			<li>Amount: <?= $row['amount'] ?></li>
-		                			<li>Description: <?= $row['description'] ?></li>
-		                		</ul>
-		                	</div>
-		                	<form method="post" action="process_postprogram.php">
-						        <label for="content" ></label>
-						        <input id="content" name="content" placeholder="Leave comment here...">
-						        <input type="hidden" name="programid" value='<?= $row['programid'] ?>'/>
-						        <input class="submit" name="command" type="submit" value="Comment">
-    						</form>
-    						<!-- Show comments per program -->
-		                	<?php if ($comments->rowCount() != 0): ?>
-								<?php while ($comment = $comments->fetch()): ?>
-									<?php $count++; ?>
-            						<?php if($count < 6): ?>
-            							<?= $count ?>
-										<?php if ($comment['programid'] == $row['programid']): ?>
-											<div>
-									        	<small>
-									        		<?= $comment['username'] ?>
-						        					<?= date('F d, Y, h:i a',strtotime($comment['date']))?>
-						        					<a href="edit.php?id=<?= $comment['commentid'] ?>">edit</a>
-						        				</small>
-									            <p><?= substr($comment['content'],0,200) ?></p>
-									            <?php if(strlen($comment['content']) > 200) : ?>
-                  									...<a href='post.php?id=<?php echo $row['commentid']?>'>Read more</a>
-                  								<?php endif ?> 
-									    	</div>
-									    <?php endif ?>
-									<?php endif ?>
-								<?php endwhile ?>
-							<?php endif ?>
+		                	<h2><a href='showprogram.php?programid=<?= $row['programid']?>'><?= $row['difficulty_level'] ?></a></h2>
 		              	</div>
 		          	<?php endwhile ?>
 		      </ul>
